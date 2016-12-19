@@ -129,11 +129,11 @@ def main(args, root_or_admin):
 
             if target_mac != cur_addr:
                 set_interface_mac(device, target_mac, prt)
-                print etime+" "+port+" ["+device+"] set to "+cur_addr
+                print etime+" "+port+" ["+device+"] set to "+target_mac
             else:
                 if args['--force']:
                     set_interface_mac(device, target_mac, prt)
-                    print etime+" "+prt+" ["+device+"] forced to "+cur_addr
+                    print etime+" "+prt+" ["+device+"] forced to "+target_mac
                 elif '--maintain' not in args:
                     print('Error: Already the current MAC addresses, use --force to force the address again')
                     # return EXISTING_MAC_ADDR
