@@ -23,6 +23,8 @@ Options:
 """
 import sys
 import os
+import re
+import time
 
 if sys.platform == 'win32':
     import ctypes
@@ -118,7 +120,20 @@ def main(args, root_or_admin):
                     print('Error: Must run this as root (or with sudo) to set MAC addresses')
                     return NON_ROOT_USER
 
-            set_interface_mac(device, target_mac, port)
+            # Expand acceptable input MAC is displayed with atleast the
+            # following (-: )
+            p = re.compile('[^0-9A-Z]')
+            target_mac = p.sub(':', target_mac.upper())
+            (prt, dev, addr, cur_addr) = spoofer.find_interface(device)
+            etime = time.strftime('%X')
+
+            if target_mac != cur_addr:
+                set_interface_mac(device, target_mac, prt)
+                print etime+" "+port+" ["+device+"] set to "+cur_addr
+            else:
+                if args['--force']:
+                    set_interface_mac(device, target_mac, prt)
+                    print etime+" "+prt+" ["+device+"] forced to "+cur_addr
     elif args['normalize']:
         print(normalize_mac_address(args['<mac>']))
 
