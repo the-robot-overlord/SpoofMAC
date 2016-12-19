@@ -134,6 +134,13 @@ def main(args, root_or_admin):
                 if args['--force']:
                     set_interface_mac(device, target_mac, prt)
                     print etime+" "+prt+" ["+device+"] forced to "+cur_addr
+                elif '--maintain' not in args:
+                    print('Error: Already the current MAC addresses, use --force to force the address again')
+                    # return EXISTING_MAC_ADDR
+            if args['--maintain']:
+                sys.stdout.write("\r"+etime+" "+prt+" ["+device+"] "+cur_addr)
+                sys.stdout.flush()
+
     elif args['normalize']:
         print(normalize_mac_address(args['<mac>']))
 
@@ -153,4 +160,8 @@ if __name__ == '__main__':
     except AttributeError:
         root_or_admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
 
-    sys.exit(main(arguments, root_or_admin))
+    result = main(arguments, root_or_admin)
+    while '--maintain' in arguments:
+        time.sleep(float(arguments['--maintain']))
+        main(arguments, root_or_admin)
+    sys.exit(result)
