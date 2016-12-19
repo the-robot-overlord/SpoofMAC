@@ -5,7 +5,7 @@
 Usage:
     spoof-mac list [--wifi]
     spoof-mac randomize [--local] <devices>...
-    spoof-mac set <mac> <devices>...
+    spoof-mac set [--maintain=<s>] [--force] <mac> <devices>...
     spoof-mac reset <devices>...
     spoof-mac normalize <mac>
     spoof-mac -h | --help
@@ -17,6 +17,9 @@ Options:
     --version       Show package version.
     --wifi          Try to only show wireless interfaces.
     --local         Set the locally administered flag on randomized MACs.
+    --force         Apply even if already as set.
+    --maintain=<s>  Maintain asignments, even if after reconnect [default: 10].
+
 """
 import sys
 import os
